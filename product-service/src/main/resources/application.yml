@@ -4,8 +4,16 @@
 #      username: admin
 #      password: 123
 #      uri: mongodb://localhost:27017/product-service
+server:
+  port: 0
 spring:
   data:
     mongodb:
       uri: mongodb://admin:123@localhost:27017/?authSource=admin
       database: product-service
+  application:
+    name: product-service
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${random.uuid}
+
