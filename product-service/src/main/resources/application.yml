@@ -1,0 +1,37 @@
+server:
+  port: 0
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+spring:
+  data:
+    mongodb:
+      uri: mongodb://admin:123@localhost:27017/?authSource=admin
+      database: product-service
+  application:
+    name: product-service
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: 123
+  security:
+    oauth2:
+      resource-server:
+        jwt:
+          issuer-uri: http://localhost:8180/auth/realms/microservices-realm
+
+
+#  cloud:
+#    config:
+#      uri: http://localhost:8888
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${random.uuid}
+
+
+
+

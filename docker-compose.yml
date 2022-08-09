@@ -1,0 +1,42 @@
+version: "3.9"
+services:
+    rabbitmq3:
+        container_name: "rabbitmq"
+        image: rabbitmq:3.8-management-alpine
+        environment:
+            - RABBITMQ_DEFAULT_USER=admin
+            - RABBITMQ_DEFAULT_PASS=123
+        ports:
+            # AMQP protocol port
+            - '5672:5672'
+            # HTTP management UI
+            - '15672:15672'
+    mysql:
+        image: mysql:5.7
+        volumes:
+            - mysql_data:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: keycloak
+            MYSQL_USER: keycloak
+            MYSQL_PASSWORD: password
+        ports:
+            - 3306:3306
+    keycloak:
+        container_name: keycloak
+        image: quay.io/keycloak/keycloak:legacy
+        environment:
+            DB_VENDOR: MYSQL
+            DB_ADDR: mysql
+            DB_DATABASE: keycloak
+            DB_USER: keycloak
+            DB_PASSWORD: password
+            KEYCLOAK_USER: admin
+            KEYCLOAK_PASSWORD: Pa55w0rd
+        ports:
+            - 8180:8080
+        depends_on:
+            - mysql
+volumes:
+    mysql_data:
+        driver: local

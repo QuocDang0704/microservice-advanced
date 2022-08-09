@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: apt-gateway
+
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+    gateway:
+      routes:
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/api/product
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/api/order
+#      default-filters: TokenRelay
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+  security:
+    oauth2:
+      resource-server:
+        jwt:
+          issuer-uri: http://localhost:8180/auth/realms/microservices-realm
+#      client:
+#        registration:
+#          gateway:
+#            provider: keycloak
+#            client-id: spring-cloud-gateway-client
+#            client-secret: C9lTxIkJkkXJO1GHlg47AEJpLS7QmVqT
+#            authorization-grant-type: authorization_code
+#            redirect-uri: http://localhost:8080/login/oauth2/code/spring-cloud-gateway-client
+#        provider:
+#          keycloak:
+#            issuer-uri: http://localhost:8180/auth/realms/microservices-project-realm
+  main:
+    allow-bean-definition-overriding: true
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${random.uuid}
